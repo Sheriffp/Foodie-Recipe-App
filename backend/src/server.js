@@ -14,7 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/api/health", (req, res) => {
-  console.log(`Request: ${req.method} ${req.path}`);
 	res.status(200).json({ success: true, message: "server health is ok!" });
 });
 
