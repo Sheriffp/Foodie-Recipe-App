@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { createUser, loginUser, existingUser } from "../models/userModel.js";
+import { createUser, fetchUser, loginUser } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
@@ -31,7 +31,7 @@ export const register = async (req, res) => {
 			});
 		}
 
-		const [userExist] = await existingUser(email);
+		const [userExist] = await fetchUser(email);
 
 		if (userExist[0]) {
 			return res
@@ -43,8 +43,7 @@ export const register = async (req, res) => {
 
 		const hashedPassword = await bcrypt.hash(password, salt);
 
-		const [newUser] = await createUser(email, hashedPassword);
-
+		await createUser(email, hashedPassword);
 		if (!newUser) {
 			return res.status(400).json({
 				success: false,
@@ -110,7 +109,7 @@ export const login = async (req, res) => {
 		res.status(200).json({
 			success: true,
 			token: token,
-			user:user,
+			user: user,
 			message: "Login successful"
 		});
 	} catch (error) {

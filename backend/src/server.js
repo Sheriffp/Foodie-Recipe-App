@@ -13,13 +13,12 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-app.get("/api/health", (req, res) => {
+app.get("/foodie/api/health", (req, res) => {
 	res.status(200).json({ success: true, message: "server health is ok!" });
 });
 
-app.use("/api/auth", authRoutes);
-app.use(protectRoute);
-app.use("/api/food", foodRoutes);
+app.use("/foodie/api/auth", authRoutes);
+app.use("/foodie/api/food", protectRoute, foodRoutes);
 
 initDb().then(() => {
 	app.listen(PORT, () => {
